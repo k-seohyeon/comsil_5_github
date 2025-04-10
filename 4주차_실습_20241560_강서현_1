@@ -1,0 +1,30 @@
+int=$#
+
+str=""
+
+if [ $# -eq 0 ]; then
+  echo "Usage: phone searchfor [...searchor]"
+  echo "(You didn't tell me what you want to search for.)"
+fi
+
+for i in "$@"; do
+  if [ $int -eq $# ]
+  then
+	str=$(egrep -i "$i" mydata.txt)
+  fi
+  
+  if [ -n "$str" ]
+  then
+	str=$(egrep -i "$str\$i" mydata.txt)
+  fi
+
+  int=`expr $int - 1`
+  
+  if [ $int -eq 0 ]
+  then
+	if [ -n "$str" ]
+	then
+		egrep -i "$str" mydata.txt|awk -f display.awk
+	fi
+  fi
+done
